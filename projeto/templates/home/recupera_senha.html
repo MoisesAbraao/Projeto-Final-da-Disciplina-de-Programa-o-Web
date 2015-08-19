@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="static/css/bootstrap.min.css">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="static/css/bootstrap-theme.min.css">
+
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="static/js/bootstrap.min.js"></script>
+		<title>Recupera Senha</title>
+	</head>
+	<body>
+		<div class="panel panel-default">
+			<div class="page-header">
+				<h1>Recupere sua senha!</h1>
+			</div>
+		<div class="panel-body">
+
+				<form class="navbar-form navbar-left" action="#" method="POST">
+					<table>
+							<tr>
+								<td>Matrícula:</td>
+								<td><input type="text" class="form-control" name="matricula"></td>
+							</tr>
+							<tr>
+								<td>E-mail:</td>
+								<td><input type="text" class="form-control" name="email"></td>
+							</tr>
+						</table><br>
+						<input type="submit" class="btn btn-primary btn-lg" value="Enviar"/>
+						<a class="btn btn-primary btn-lg" href="{{ url_for('home.login') }}" role="button">Voltar</a>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>
