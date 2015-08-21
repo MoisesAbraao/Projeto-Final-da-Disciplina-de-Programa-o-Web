@@ -73,4 +73,15 @@ class Disciplina(db.Model):
 	def __init__(self, disciplina):
 		self.disciplina = disciplina
 
+class Arquivo(db.Model):
+	__tablename__ = "uploads"
+
+	_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	descricao = db.Column(db.String(50))
+	arquivo = db.Column(db.String)
+
+	def __init__(self, descricao, arquivo):
+		self.descricao = descricao
+		self.arquivo = arquivo
+
 

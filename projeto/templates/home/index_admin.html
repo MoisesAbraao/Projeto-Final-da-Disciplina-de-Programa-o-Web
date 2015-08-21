@@ -12,24 +12,26 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="static/js/bootstrap.min.js"></script>
 	<body>
-		<div class="page-header">
-			<h4>{{ current_user.usuario }}</h4>
-			<a href="{{ url_for('home.logout') }}">Logout</a>
+			<div class="page-header">
+				<h1>Bem-Vindo <small>{{ current_user.usuario }}</small></h1>
+				<a href="{{ url_for('home.logout') }}">Logout</a>
 			
 			{% for error in get_flashed_messages(category_filter=['login']) %}
 						<div class="alert alert-success" role="alert">{{ error }}</div>
 					{% endfor %}
-		</div>
-		
-		
-		<div class="btn-group">
-			<a href="{{ url_for('home.registro_de_usuario') }}"><input type="button" class="btn btn-primary btn-lg" value="Cadastro de Usuários"></a>
+			</div>
 
-			<a href="{{ url_for('home.lista_professor') }}"><input type="button" class="btn btn-primary btn-lg" value="Lista de Professores"></a>
-
-			<a href="{{ url_for('home.lista_aluno') }}"><input type="button" class="btn btn-primary btn-lg" value="Lista de Alunos"></a>
-		<!-- 	<a href="#" class="btn btn-primary btn-lg">Lista de Professores</a> -->
-		</div>
+		<div class="list-group">
+			  <a href="#" class="list-group-item active">
+			    <h4>Menu</h4>
+			  </a>
+			  <a href="{{ url_for('home.registro_de_usuario') }}" class="list-group-item">Cadastro de Usuários</a>
+			  <a href="#" class="list-group-item">Cadastro de Disciplinas</a>
+			  <a href="{{ url_for('home.lista_professor') }}" class="list-group-item">Lista de Professores</a>
+			  <a href="{{ url_for('home.lista_aluno') }}" class="list-group-item">Lista de Alunos</a>
+			  <a href="#" class="list-group-item">Lista de Disciplinas</a>
+			  
+			</div>
 
 		
 	</body>

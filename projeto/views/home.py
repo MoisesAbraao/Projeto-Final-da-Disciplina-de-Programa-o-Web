@@ -137,27 +137,53 @@ def excluir(id):
 	usuarios = Usuario.query.all()
 	return redirect(url_for("home.lista", usuarios=usuarios))
 	
-# @home.route("/atualizar/<int:id>", methods=['GET', 'POST'])
-# #@login_required()
-# def atualizar(id):
-# 	#usuario = Usuario.query.filter_by(_id=id).first()
-	
-# 	form = UsuarioRegistroForm()
+@home.route("/atualizar/<int:id>", methods=['GET', 'POST'])
+@login_required()
+def atualizar(id):
+	usuario = Usuario.query.filter_by(_id=id).first()
+	#import pdb; pdb.set_trace()
+	form = UsuarioRegistroForm()
 
-# 	if form.validate_on_submit():
-# 		usuario = (form.usuario.data)
-# 		matricula = (form.matricula.data)
-# 		email = (form.email.data)
+	if form.validate_on_submit():
+		usuario = (form.usuario.data)
+		matricula = (form.matricula.data)
+		email = (form.email.data)
 		
 
 
-# 		if usuario and matricula and email:
-# 			u = Usuario(usuario, matricula, email)
-# 			db.session.add(u)
-# 			db.session.commit()
-# 		flash('Atualizado com Sucesso!', 'login')
-# 		return redirect(url_for("home.lista"))
+		if usuario and matricula and email:
+			usuario.usuario = usuario
+			usuario.matricula = matricula
+			usuario.email = email
+			db.session.commit()
+
+		flash('Atualizado com Sucesso!', 'index')
 	
-# 	return render_template('home/atualizar.html', form=form)
+	return render_template('home/atualizar.html', usuario=usuario, form=form)
+
+@home.route("/upload_file", methods=['GET', 'POST'])
+@login_required()
+def upload_file():
+	form = UploadFileForm()
+
+	import pdb; pdb.set_trace()
+
+	if form.validate_on_submit():
+		descricao = (form.descricao.data)
+		arquivo = (form.arquivo.data)
+
+		if descricacao and arquivo:
+			a = Arquivo(descricao, arquivo)
+			db.session.add(a)
+			db.session.commit()
+		flash('Cadastrado com Sucesso!', 'login')
+		return redirect(url_for("home.index", form=form))
+
+
+
+
+
+
+
 
 

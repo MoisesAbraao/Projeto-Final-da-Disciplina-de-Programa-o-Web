@@ -13,17 +13,33 @@
 		<script src="static/js/bootstrap.min.js"></script>
 	<body>
 		<div class="page-header">
-			<h4>{{ current_user.usuario }}</h4>
-			<a href="{{ url_for('home.logout') }}">Logout</a>
+				<h1>Bem-Vindo <small>{{ current_user.usuario }}</small></h1>
+				<a href="{{ url_for('home.logout') }}">Logout</a>
 			
 			{% for error in get_flashed_messages(category_filter=['login']) %}
 						<div class="alert alert-success" role="alert">{{ error }}</div>
 					{% endfor %}
-		</div>
-		
+			</div>
 		
 
-		
+		<form class="glyphicon glyphicon-folder-open" action="{{ url_for('home.upload_file') }}" method="POST">
+
+			<table>
+					<tr>
+						<td>Descrição</td>
+						<td><input type="text" class="form-control"></td>
+					</tr>
+					<tr>
+						<td><input type="file" name="arquivo"></td>
+					</tr>
+			</table>
+			
+		    	<!-- <input type="file"> -->
+		    	<input type="submit" class="btn btn-primary btn-lg" value="Enviar">
+
+				
+		</form>
+
 		
 		
 	</body>
