@@ -180,6 +180,40 @@ def upload_file():
 		return redirect(url_for("home.index", form=form))
 
 
+@home.route("/registro_de_disciplina", methods=['GET', 'POST'])
+@login_required()
+def registro_de_disciplina():
+	form = DisciplinaRegistroForm()
+	#import pdb; pdb.set_trace()
+	if form.validate_on_submit():
+		disciplina = (form.disciplina.data)
+
+		if disciplina:
+			d = Disciplina(disciplina)
+			db.session.add(d)
+			db.session.commit()
+		flash('Cadastrado com Sucesso!', 'login')
+		return redirect(url_for("home.index"))
+	
+	return render_template('home/registro_de_disciplina.html', form=form)
+
+
+@home.route("/lista_disciplina")
+def lista_disciplina():
+	disciplinas = Disciplina.query.all()
+	return render_template("home/lista_disciplina.html", disciplinas=disciplinas)
+
+@home.route("/excluir_disciplina/<int:id>")
+def excluir_disciplina(id):
+	disciplina = Disciplina.query.filter_by(_id=id).first()
+
+	db.session.delete(disciplina)
+	db.session.commit()
+	
+	disciplinas = Disciplina.query.all()
+	return redirect(url_for("home.lista_disciplina", disciplinas=disciplinas))
+
+
 
 
 

@@ -68,7 +68,7 @@ class Disciplina(db.Model):
 	__tablename__ = 'disciplina'
 
 	_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-	disciplina = db.Column(db.String(12), unique=True)
+	disciplina = db.Column(db.String(50), unique=True)
 
 	def __init__(self, disciplina):
 		self.disciplina = disciplina

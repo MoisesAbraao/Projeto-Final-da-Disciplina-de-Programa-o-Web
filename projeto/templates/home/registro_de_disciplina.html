@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="static/css/bootstrap.min.css">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="static/css/bootstrap-theme.min.css">
+
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="static/js/bootstrap.min.js"></script>
+		<title>Página de Cadastro</title>
+	</head>
+	<body>
+		<div class="panel panel-default">
+			<div class="page-header">
+			<h1>Cadastro de Disciplina</h1>
+		</div>
+		  <div class="panel-body">
+		    <form class="navbar-form navbar-left" action="{{ url_for('home.registro_de_disciplina') }}" method="POST">
+		    	{{ form.hidden_tag() }}
+			<table>
+					<tr>
+						<td>Disciplina</td>
+						<td>{{form.disciplina(class_="form-control")}}</td>
+						<td>{% if form.disciplina.errors %}
+							<span style="color:red">{{ form.disciplina.errors[0] }}</span>
+						{% endif %}</td>
+						
+					</tr>
+				</table><br>
+				<input type="submit" class="btn btn-primary btn-lg" value="Salvar Cadastro"/>
+				<a class="btn btn-primary btn-lg" href="{{ url_for('home.login') }}" role="button">Voltar</a>
+			</form>
+		  </div>
+		</div>
+	</body>
+</html>
