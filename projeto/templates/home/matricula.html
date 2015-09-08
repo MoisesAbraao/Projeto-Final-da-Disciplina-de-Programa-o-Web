@@ -10,28 +10,24 @@
 
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="static/js/bootstrap.min.js"></script>
-		<title>Página de Cadastro</title>
+		<title>Página de Matrícula</title>
 	</head>
 	<body>
 		<div class="panel panel-default">
 			<div class="page-header">
-			<h1>Cadastro de Disciplina</h1>
+			<h1>Página de Matrícula</h1>
 		</div>
 		  <div class="panel-body">
-		    <form class="navbar-form navbar-left" action="{{ url_for('home.registro_de_disciplina') }}" method="POST">
+		    <form class="navbar-form navbar-left" action="{{ url_for('home.matricula_user') }}" method="POST">
 		    	{{ form.hidden_tag() }}
 			<table>
 					<tr>
-						<td>Disciplina</td>
-						<td>{{form.disciplina(class_="form-control")}}</td>
-						<td>{% if form.disciplina.errors %}
-							<span style="color:red">{{ form.disciplina.errors[0] }}</span>
-						{% endif %}</td>
-						
+						<td>Usuário</td>
+						<td>{{form.usuario(class_="form-control")}}</td>
 					</tr>
 					<tr>
-						<td>Turma</td>
-						<td>{{form.turma(class_="form-control")}}</td>
+						<td>Disciplina</td>
+						<td>{{form.disciplina(class_="form-control")}}</td>
 					</tr>
 				</table><br>
 				<input type="submit" class="btn btn-primary btn-lg" value="Salvar Cadastro"/>

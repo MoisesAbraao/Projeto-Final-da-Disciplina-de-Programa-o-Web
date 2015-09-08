@@ -16,13 +16,31 @@ class UsuarioRegistroForm(Form):
 	confirma_senha = PasswordField('Confirmação de Senha', validators=[Required(' * Campo obrigatório.'), EqualTo('senha', 'Preencha os campos de senha corretamente!')])
 	
 
+
+
 class UsuarioLoginForm(Form):
 	matricula = TextField('Matrícula', validators=[Required('Campo obrigatório.')])
 	senha = PasswordField('Senha', validators=[Required('Campo obrigatório.')])
+
+
 
 class UploadFileForm(Form):
 	descricao = TextField('Descrição', validators=[Required(' * Campo obrigatório.'), Length(min=5, max=50, message='A Descrição deve conter de 5 a 50 caracteres!')])
 	arquivo = FileField('Arquivo', validators=[Required('Campo obrigatório.')])
 
+
+
 class DisciplinaRegistroForm(Form):
 	disciplina = TextField('Disciplina', validators=[Required(' * Campo obrigatório.'), Length(min=5, max=50, message='O nome do disciplina deve conter de 5 a 50 caracteres!')])
+	turma = SelectField('Turma', validators=[Required('Selecione uma Turma!')])
+
+
+
+class TurmaRegistroForm(Form):
+	turma = TextField('Turma', validators=[Required(' * Campo obrigatório.'), Length(min=5, max=50, message='O nome da Turma deve conter de 5 a 50 caracteres!')])
+
+class UsuarioRegistroDisciplinaForm(Form):
+	usuario = SelectField('Usuário', validators=[Required('Selecione um Usuário!')])
+	disciplina = SelectField('Disciplina', validators=[Required('Selecione uma Disciplina!')])
+
+

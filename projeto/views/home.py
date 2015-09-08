@@ -4,7 +4,7 @@ import hashlib
 import os
 from flask import Blueprint, render_template, request, redirect, flash, url_for, send_from_directory
 from flask.ext.login import current_user, logout_user, login_user
-from sqlalchemy import func
+from sqlalchemy import func, or_
 from sqlalchemy.orm import aliased
 from .. import app, db, forms
 from ..models import *
@@ -172,12 +172,18 @@ def upload_file():
 		descricao = (form.descricao.data)
 		arquivo = (form.arquivo.data)
 
-		if descricacao and arquivo:
+		if descricao and arquivo:
 			a = Arquivo(descricao, arquivo)
 			db.session.add(a)
 			db.session.commit()
 		flash('Cadastrado com Sucesso!', 'login')
-		return redirect(url_for("home.index", form=form))
+	return render_template("home/index_professor.html", form=form)
+	#return redirect(url_for("home.index", form=form))
+
+@home.route("/lista_uploads")
+def lista_uploads():
+	arquivos = Arquivo.query.all()
+	return render_template("home/lista_uploads.html", arquivos=arquivos)
 
 
 @home.route("/registro_de_disciplina", methods=['GET', 'POST'])
@@ -185,11 +191,17 @@ def upload_file():
 def registro_de_disciplina():
 	form = DisciplinaRegistroForm()
 	#import pdb; pdb.set_trace()
+
+	turmas = Turma.query.all()
+	form.turma.choices=[(str(turma._id), turma.turma) for turma in turmas]
+
+	
 	if form.validate_on_submit():
 		disciplina = (form.disciplina.data)
+		turma = (form.turma.data)
 
-		if disciplina:
-			d = Disciplina(disciplina)
+		if disciplina and turma:
+			d = Disciplina(disciplina, turma)
 			db.session.add(d)
 			db.session.commit()
 		flash('Cadastrado com Sucesso!', 'login')
@@ -212,6 +224,59 @@ def excluir_disciplina(id):
 	
 	disciplinas = Disciplina.query.all()
 	return redirect(url_for("home.lista_disciplina", disciplinas=disciplinas))
+
+@home.route("/registro_de_turma", methods=['GET', 'POST'])
+@login_required()
+def registro_de_turma():
+	form = TurmaRegistroForm()
+
+	if form.validate_on_submit():
+		turma = (form.turma.data)
+
+		if turma:
+			t = Turma(turma)
+			db.session.add(t)
+			db.session.commit()
+		flash('Cadastrado com Sucesso!', 'login')
+		return redirect(url_for("home.index"))
+	
+	return render_template('home/registro_de_turma.html', form=form)
+
+@home.route("/lista_turma")
+def lista_turma():
+	turmas = Turma.query.all()
+	return render_template("home/lista_turma.html", turmas=turmas)
+
+
+@home.route("/matricula_user", methods=['GET', 'POST'])
+@login_required()
+def matricula_user():
+	form = UsuarioRegistroDisciplinaForm()
+
+	usuarios = Usuario.query.filter(or_(Usuario.role==UsuarioRole.professor, Usuario.role==UsuarioRole.aluno))
+	form.usuario.choices=[(str(usuario._id), usuario.usuario) for usuario in usuarios]
+
+	disciplinas = Disciplina.query.all()
+	form.disciplina.choices=[(str(disciplina._id), disciplina.disciplina) for disciplina in disciplinas]
+
+	if form.validate_on_submit():
+		usuario = (form.usuario.data)
+		disciplina = (form.disciplina.data)
+
+		if usuario and disciplina:
+			ud = UsuarioDisciplina(usuario, disciplina)
+			db.session.add(ud)
+			db.session.commit()
+		flash('Cadastrado com Sucesso!', 'login')
+		return redirect(url_for("home.index"))
+
+
+	
+	return render_template('home/matricula.html', form=form)
+
+
+
+
 
 
 

@@ -64,14 +64,34 @@ class Turma(db.Model):
 		self.turma = turma
 
 
+
+
 class Disciplina(db.Model):
 	__tablename__ = 'disciplina'
 
 	_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	disciplina = db.Column(db.String(50), unique=True)
+	turma_id = db.Column(db.Integer, ForeignKey("turma._id"))
 
-	def __init__(self, disciplina):
+	def __init__(self, disciplina, turma_id):
 		self.disciplina = disciplina
+		self.turma_id = turma_id
+
+
+
+class UsuarioDisciplina(db.Model):
+	__tablename__ = 'usuario_disciplina'
+
+	_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+	usuario_id = db.Column(db.Integer, ForeignKey("usuario._id"))
+	disciplina_id = db.Column(db.Integer, ForeignKey("disciplina._id"))
+
+	def __init__(self, usuario_id, disciplina_id):
+		self.usuario_id = usuario_id
+		self.disciplina_id = disciplina_id
+
+
+
 
 class Arquivo(db.Model):
 	__tablename__ = "uploads"

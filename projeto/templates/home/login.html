@@ -13,44 +13,56 @@
 		<title>Página de Login</title>
 	</head>
 	<body>
-		<div class="panel panel-default">
-			<div class="page-header">
-				<h1>Login</h1>
-			</div>
-			{% for error in get_flashed_messages(category_filter=['login']) %}
-						<div class="alert alert-danger" role="alert">{{ error }}</div>
-					{% endfor %}
-		<div class="panel-body">
+		
+    <div id="loginModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              
+              <h1 class="text-center">Login</h1>
+          </div>
+          <div class="modal-body">
+            {% for error in get_flashed_messages(category_filter=['login']) %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+              {% endfor %}
+              <form class="form col-md-19 center-block" action="{{ url_for('home.login') }}" method="POST">
+              {{ form.hidden_tag() }}
+                
+                <div class="form-group">
 
-				<form class="navbar-form navbar-left" action="{{ url_for('home.login') }}" method="POST">
-					{{ form.hidden_tag() }}
-					
-					<table>
-							<tr>
-								<td>Matrícula</td>
-								<td>{{form.matricula(class_="form-control")}}</td>
-								<td>
-								{% if form.matricula.errors %}
-									<span style="color:red">{{ form.matricula.errors[0] }}</span>
-								{% endif %}</td>
-							</tr>
-							<tr>
-								<td>Senha</td>
-								<td>{{form.senha(class_="form-control")}}</td>
-								<td>
-								{% if form.senha.errors %}
-									<span style="color:red">{{ form.senha.errors[0] }}</span>
-								{% endif %}</td>
-							</tr>
-						</table><br>
-						<input type="submit" class="btn btn-primary btn-lg" value="Entrar"/><br>
-						<a href="{{ url_for('home.registro') }}">Cadastre-se</a><br>
-						<a href="https://suap.ifrn.edu.br/comum/solicitar_trocar_senha/">Esqueceu Sua Senha?</a><br>
-						<a href="{{ url_for('home.lista') }}">Lista</a>
-						<!-- <a href="{{ url_for('home.recupera_senha') }}">Esqueceu sua Senha?</a> -->
-				</form>
-				
-			</div>
-		</div>
+                  {{form.matricula(class_="form-control input-lg", placeholder="Matrícula")}}
+                    
+                    {% if form.matricula.errors %}
+                      <span style="color:red">{{ form.matricula.errors[0] }}</span>
+                    {% endif %}
+
+                </div>
+
+                <div class="form-group">
+                  {{form.senha(class_="form-control input-lg", placeholder="Senha")}}
+                    
+                    {% if form.senha.errors %}
+                      <span style="color:red">{{ form.senha.errors[0] }}</span>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary btn-lg btn-block">Entrar</button>
+
+                  <a href="{{ url_for('home.registro') }}">Cadastre-se</a><br>
+                  <a href="https://suap.ifrn.edu.br/comum/solicitar_trocar_senha/">Esqueceu Sua Senha?</a><br>
+                  <a href="{{ url_for('home.lista') }}">Lista</a>
+                  <!-- <a href="{{ url_for('home.recupera_senha') }}">Esqueceu sua Senha?</a> -->
+
+                  
+                </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+              <div class="col-md-12">
+          </div>  
+          </div>
+      </div>
+      </div>
+    </div>
 	</body>
 </html>

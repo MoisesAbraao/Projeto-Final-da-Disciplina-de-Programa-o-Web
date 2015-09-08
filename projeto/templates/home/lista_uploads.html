@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Lista de Professores</title>
+		<title>Pesquisar</title>
 		<meta charset="UTF-8">
 		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="static/css/bootstrap.min.css">
@@ -13,32 +13,25 @@
 		<script src="static/js/bootstrap.min.js"></script>
 	<body>
 		<div class="page-header">
-			<h1>Lista de Professores</h1>
+			<h1>Lista</h1>
 		</div>
     <div class="panel panel-default">
       <div class="panel-heading">Usuários</div>
-        <table class="table table-striped" border="1">
+        <table class="table" border="1">
           <tr>
           <td>ID</td>
+          <td>descrição</td>
           <td>Nome</td>
-          <td>Matrícula</td>
-          <td>E-mail</td>
-          <td>Tipo</td>
-          <td>Senha</td>
-          <td>Apagar</td>
-          <td>Editar</td>
-          
+          <td>Excluir</td>
+          <td>Update</td>
         </tr>
-        {% for usuario in usuarios %}
+        {% for uploads in arquivos %}
           <tr>
-            <td>{{ usuario._id }}</td>
-            <td>{{ usuario.usuario }}</td>
-            <td>{{ usuario.matricula }}</td>
-            <td>{{ usuario.email }}</td>
-            <td>{{ usuario.role }}</td>
-            <td>{{ usuario.senha}}</td>
-            <td><center><a href="/excluir/{{ usuario._id }}">Remover</a></center></td>
-            <td><center><a href="/atualizar/{{ usuario._id }}">Editar</a></center></td>
+            <td>{{ uploads._id }}</td>
+            <td>{{ uploads.descricao }}</td>
+            <td>{{ uploads.arquivo }}</td>
+            <td><center><a href="#">Remover</a></center></td>
+            <td><center><a href="#">Editar</a></center></td>
             
           </tr>
         {% endfor %}
