@@ -12,6 +12,8 @@ from ..forms import *
 from ..util import login_required
 from ..enums import *
 
+from werkzeug import secure_filename
+
 
 home = Blueprint('home', __name__)
 
@@ -161,24 +163,63 @@ def atualizar(id):
 	
 	return render_template('home/atualizar.html', usuario=usuario, form=form)
 
+
+def allowed_file(filename):
+	return '.' in filename and filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
+
 @home.route("/upload_file", methods=['GET', 'POST'])
 @login_required()
 def upload_file():
+
+	# import pdb; pdb.set_trace()
+	from datetime import datetime
+
 	form = UploadFileForm()
 
-	import pdb; pdb.set_trace()
+	disciplinas = Disciplina.query.all()
+	form.disciplina.choices=[(str(disciplina._id), disciplina.disciplina) for disciplina in disciplinas]
 
-	if form.validate_on_submit():
-		descricao = (form.descricao.data)
-		arquivo = (form.arquivo.data)
+	
 
-		if descricao and arquivo:
-			a = Arquivo(descricao, arquivo)
-			db.session.add(a)
-			db.session.commit()
-		flash('Cadastrado com Sucesso!', 'login')
-	return render_template("home/index_professor.html", form=form)
-	#return redirect(url_for("home.index", form=form))
+	if request.method == "POST":
+
+		descricao = form.descricao.data
+		arquivo = request.files['arquivo']
+
+
+		
+	# if form.validate_on_submit():
+
+	# 	arquivo = form.arquivo.data
+		
+		if arquivo and allowed_file(arquivo.filename):
+			filename = secure_filename(arquivo.filename)
+			new_filename , new_filename_ext = os.path.splitext(filename)
+			new_filename = descricao
+			final_filename = str(new_filename+new_filename_ext)
+
+			arquivo.save(os.path.join(app.config['UPLOAD_FOLDER'], final_filename))
+
+
+
+			flash('Enviado com Sucesso!', 'login')
+
+	# if form.validate_on_submit():
+	# 	descricao = form.descricao.data
+	# 	arquivo = form.arquivo.data
+	# 	disciplina = form.disciplina.data
+
+	# 	if descricao and arquivo and disciplina:
+	# 		a = Arquivo(descricao, arquivo, disciplina)
+	# 		db.session.add(a)
+	# 		db.session.commit()
+
+	return render_template("home/upload_file.html", form=form)
+
+@home.route('/uploads/<final_filename>')
+def uploaded_file(final_filename):
+	return send_from_directory(app.config['UPLOAD_FOLDER'],final_filename)
+	
 
 @home.route("/lista_uploads")
 def lista_uploads():

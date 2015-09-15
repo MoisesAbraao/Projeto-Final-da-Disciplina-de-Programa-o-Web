@@ -99,9 +99,12 @@ class Arquivo(db.Model):
 	_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 	descricao = db.Column(db.String(50))
 	arquivo = db.Column(db.String)
+	disciplina_id = db.Column(db.Integer, ForeignKey("disciplina._id"))
 
-	def __init__(self, descricao, arquivo):
+	def __init__(self, descricao, arquivo, disciplina_id):
 		self.descricao = descricao
 		self.arquivo = arquivo
+		self.disciplina_id = disciplina_id
+
 
 

@@ -27,20 +27,31 @@
   </div>
 </nav>
 
+
+
+<div class="container">
+	<div class="panel-heading"><h2>Enviar Arquivo<h2></div>
+		{% for error in get_flashed_messages(category_filter=['login']) %}
+					<div class="alert alert-success" role="alert">{{ error }}</div>
+				{% endfor %}
+	
+		
+			
 <div class="container">
 	<div class="list-group">
 		{% for error in get_flashed_messages(category_filter=['login']) %}
 					<div class="alert alert-success" role="alert">{{ error }}</div>
 				{% endfor %}
 		</div>
-
-
-		
-		<div class="list-group">
 		  <a href="#" class="list-group-item active">
-		    Disciplinas
+		    <h4>Menu</h4>
 		  </a>
+		  <a href="{{ url_for('home.upload_file') }}" class="list-group-item">Enviar Arquivo</a>
+		  <a href="#" class="list-group-item">Lista de Arquivos Enviados</a>
 		</div>
+
+  
+</div>
 		
 			<!-- <form class="glyphicon glyphicon-folder-open" action="{{ url_for('home.upload_file') }}" method="POST">
 
@@ -64,7 +75,6 @@
 		</div> -->
 
   
-</div> <!-- /container -->
 
 
 <!-- Bootstrap core JavaScript

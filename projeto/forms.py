@@ -27,6 +27,7 @@ class UsuarioLoginForm(Form):
 class UploadFileForm(Form):
 	descricao = TextField('Descrição', validators=[Required(' * Campo obrigatório.'), Length(min=5, max=50, message='A Descrição deve conter de 5 a 50 caracteres!')])
 	arquivo = FileField('Arquivo', validators=[Required('Campo obrigatório.')])
+	disciplina = SelectField('Disciplina', validators=[Required('Selecione uma Disciplina!')])
 
 
 

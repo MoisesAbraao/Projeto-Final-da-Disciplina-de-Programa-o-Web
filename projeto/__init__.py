@@ -3,10 +3,17 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager
 
+from werkzeug import secure_filename
+
 
 # cria a aplicacao e informa qual arquivo contem os parametros de configuracao
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config')
+
+app.config['UPLOAD_FOLDER'] = '/Users/MoisesAbraao/prog_web_ifrn/app/projeto/uploads/'
+app.config['ALLOWED_EXTENSIONS'] = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'py', 'docx', 'doc'])
+
+
 
 
 # cria o objeto de banco de dados da aplicacao

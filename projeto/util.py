@@ -30,3 +30,4 @@ def login_required(*roles):
             return func(*args, **kwargs)
         return decorated_view
     return wrapper
+
