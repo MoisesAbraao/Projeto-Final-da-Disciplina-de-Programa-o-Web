@@ -172,7 +172,7 @@ def allowed_file(filename):
 def upload_file():
 
 	# import pdb; pdb.set_trace()
-	from datetime import datetime
+	#from datetime import datetime
 
 	form = UploadFileForm()
 
@@ -184,47 +184,50 @@ def upload_file():
 	if request.method == "POST":
 
 		descricao = form.descricao.data
-		arquivo = request.files['arquivo']
+		arquivo = form.arquivo.data
+		disciplina = form.disciplina.data
 
-
-		
-	# if form.validate_on_submit():
-
-	# 	arquivo = form.arquivo.data
 		
 		if arquivo and allowed_file(arquivo.filename):
 			filename = secure_filename(arquivo.filename)
-			new_filename , new_filename_ext = os.path.splitext(filename)
-			new_filename = descricao
-			final_filename = str(new_filename+new_filename_ext)
+			# new_filename , new_filename_ext = os.path.splitext(filename)
+			# new_filename = descricao
+			# final_filename = str(new_filename+new_filename_ext)
 
-			arquivo.save(os.path.join(app.config['UPLOAD_FOLDER'], final_filename))
-
-
+			arquivo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
 			flash('Enviado com Sucesso!', 'login')
 
-	# if form.validate_on_submit():
-	# 	descricao = form.descricao.data
-	# 	arquivo = form.arquivo.data
-	# 	disciplina = form.disciplina.data
 
-	# 	if descricao and arquivo and disciplina:
-	# 		a = Arquivo(descricao, arquivo, disciplina)
-	# 		db.session.add(a)
-	# 		db.session.commit()
+		if descricao and filename and disciplina:
+			uf = Arquivo(descricao, filename, disciplina)
+			db.session.add(uf)
+			db.session.commit()
 
 	return render_template("home/upload_file.html", form=form)
-
-@home.route('/uploads/<final_filename>')
-def uploaded_file(final_filename):
-	return send_from_directory(app.config['UPLOAD_FOLDER'],final_filename)
 	
 
 @home.route("/lista_uploads")
 def lista_uploads():
 	arquivos = Arquivo.query.all()
 	return render_template("home/lista_uploads.html", arquivos=arquivos)
+
+@home.route("/apaga_upload/<int:id>")
+def apaga_upload(id):
+	arquivo = Arquivo.query.filter_by(_id=id).first()
+
+	db.session.delete(arquivo)
+	db.session.commit()
+	
+	arquivos = Arquivo.query.all()
+	return redirect(url_for("home.lista_uploads", arquivos=arquivos))
+
+@home.route("/imprimir_arquivo/<filename>")
+def imprimir_arquivo(filename):
+	return send_from_directory(app.config['UPLOAD_FOLDER'],
+	 	filename)
+
+
 
 
 @home.route("/registro_de_disciplina", methods=['GET', 'POST'])

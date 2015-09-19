@@ -12,27 +12,37 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="static/js/bootstrap.min.js"></script>
 	<body>
-		<div class="page-header">
-			<h1>Lista</h1>
-		</div>
-    <div class="panel panel-default">
-      <div class="panel-heading">Usuários</div>
-        <table class="table" border="1">
+		<nav class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <h3>Bem-Vindo <small>{{ current_user.usuario }}</small></h3>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="{{ url_for('home.logout') }}">Logout</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+     <div class="panel panel-default">
+      <div class="panel-heading">Arquivos Enviados</div>
+        <table class="table table-striped" border="1">
           <tr>
           <td>ID</td>
-          <td>descrição</td>
-          <td>Nome</td>
-          <td>Excluir</td>
-          <td>Update</td>
+          <td>Descrição</td>
+          <td>Arquivo</td>
+          <td>Disciplina</td>
+          <td>Apagar</td>
+          <td>Imprimir</td>
         </tr>
         {% for uploads in arquivos %}
           <tr>
             <td>{{ uploads._id }}</td>
             <td>{{ uploads.descricao }}</td>
             <td>{{ uploads.arquivo }}</td>
-            <td><center><a href="#">Remover</a></center></td>
-            <td><center><a href="#">Editar</a></center></td>
-            
+            <td>{{ uploads.disciplina_id }}</td>
+            <td><center><a href="/apaga_upload/{{ uploads._id }}">Remover</a></center></td>
+            <td><center><a href="/imprimir_arquivo/{{ uploads.arquivo }}" class="glyphicon glyphicon-print"></a></center></td>
           </tr>
         {% endfor %}
         </table>
