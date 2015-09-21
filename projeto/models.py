@@ -100,11 +100,13 @@ class Arquivo(db.Model):
 	descricao = db.Column(db.String(50))
 	arquivo = db.Column(db.String)
 	disciplina_id = db.Column(db.Integer, ForeignKey("disciplina._id"))
+	usuario_id = db.Column(db.Integer, ForeignKey("usuario._id"))
 
-	def __init__(self, descricao, arquivo, disciplina_id):
+	def __init__(self, descricao, arquivo, disciplina_id, usuario_id):
 		self.descricao = descricao
 		self.arquivo = arquivo
 		self.disciplina_id = disciplina_id
+		self.usuario_id = usuario_id
 
 
 

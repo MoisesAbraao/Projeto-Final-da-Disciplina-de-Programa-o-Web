@@ -177,6 +177,8 @@ def upload_file():
 	form = UploadFileForm()
 
 	disciplinas = Disciplina.query.all()
+	# disciplinas = db.session.query(Disciplina) \
+	# 	.filter_by(UsuarioDisciplina, or_(current_user._id==UsuarioDisciplina))
 	form.disciplina.choices=[(str(disciplina._id), disciplina.disciplina) for disciplina in disciplinas]
 
 	
@@ -186,6 +188,7 @@ def upload_file():
 		descricao = form.descricao.data
 		arquivo = form.arquivo.data
 		disciplina = form.disciplina.data
+		usuario = current_user._id
 
 		
 		if arquivo and allowed_file(arquivo.filename):
@@ -199,8 +202,8 @@ def upload_file():
 			flash('Enviado com Sucesso!', 'login')
 
 
-		if descricao and filename and disciplina:
-			uf = Arquivo(descricao, filename, disciplina)
+		if descricao and filename and disciplina and usuario:
+			uf = Arquivo(descricao, filename, disciplina, usuario)
 			db.session.add(uf)
 			db.session.commit()
 
@@ -208,11 +211,13 @@ def upload_file():
 	
 
 @home.route("/lista_uploads")
+@login_required()
 def lista_uploads():
-	arquivos = Arquivo.query.all()
+	arquivos = Arquivo.query.filter(Arquivo.usuario_id==current_user._id)
 	return render_template("home/lista_uploads.html", arquivos=arquivos)
 
 @home.route("/apaga_upload/<int:id>")
+@login_required()
 def apaga_upload(id):
 	arquivo = Arquivo.query.filter_by(_id=id).first()
 
@@ -223,6 +228,7 @@ def apaga_upload(id):
 	return redirect(url_for("home.lista_uploads", arquivos=arquivos))
 
 @home.route("/imprimir_arquivo/<filename>")
+@login_required()
 def imprimir_arquivo(filename):
 	return send_from_directory(app.config['UPLOAD_FOLDER'],
 	 	filename)
