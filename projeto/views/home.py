@@ -49,7 +49,11 @@ def index():
 	elif current_user.role == UsuarioRole.professor:
 		return render_template('home/index_professor.html')
 	elif current_user.role == UsuarioRole.aluno:
-		return render_template('home/index_aluno.html')
+		disciplinas = db.session.query(Disciplina) \
+			.join((UsuarioDisciplina, UsuarioDisciplina.disciplina_id==Disciplina._id)) \
+			.filter(UsuarioDisciplina.usuario_id==current_user._id)
+		#disciplinas = UsuarioDisciplina.query.filter(UsuarioDisciplina.usuario_id==current_user._id)
+		return render_template('home/index_aluno.html', disciplinas=disciplinas)
 	else:
 		flash(request, 'Erro de autenticação! Entre em contato com um administrador.')
 		return redirect(url_for('home.logout'))
@@ -142,26 +146,28 @@ def excluir(id):
 @home.route("/atualizar/<int:id>", methods=['GET', 'POST'])
 @login_required()
 def atualizar(id):
-	usuario = Usuario.query.filter_by(_id=id).first()
+	us = Usuario.query.filter_by(_id=id).first()
 	#import pdb; pdb.set_trace()
-	form = UsuarioRegistroForm()
+	form = EditaUsuarioForm()
 
-	if form.validate_on_submit():
-		usuario = (form.usuario.data)
-		matricula = (form.matricula.data)
-		email = (form.email.data)
+	if request.method == 'POST':
+		usuario = request.form.get("usuario")
+		matricula = request.form.get("matricula")
+		email = request.form.get("email")
 		
 
 
 		if usuario and matricula and email:
-			usuario.usuario = usuario
-			usuario.matricula = matricula
-			usuario.email = email
+			us.usuario = usuario
+			us.matricula = matricula
+			us.email = email
 			db.session.commit()
 
 		flash('Atualizado com Sucesso!', 'index')
+		return redirect(url_for("home.index"))
+
 	
-	return render_template('home/atualizar.html', usuario=usuario, form=form)
+	return render_template('home/atualizar.html', us=us, form=form)
 
 
 def allowed_file(filename):
@@ -171,14 +177,12 @@ def allowed_file(filename):
 @login_required()
 def upload_file():
 
-	# import pdb; pdb.set_trace()
-	#from datetime import datetime
-
 	form = UploadFileForm()
 
-	disciplinas = Disciplina.query.all()
-	# disciplinas = db.session.query(Disciplina) \
-	# 	.filter_by(UsuarioDisciplina, or_(current_user._id==UsuarioDisciplina))
+	disciplinas = db.session.query(Disciplina) \
+			.join((UsuarioDisciplina, UsuarioDisciplina.disciplina_id==Disciplina._id)) \
+			.filter(UsuarioDisciplina.usuario_id==current_user._id)
+
 	form.disciplina.choices=[(str(disciplina._id), disciplina.disciplina) for disciplina in disciplinas]
 
 	
@@ -213,8 +217,19 @@ def upload_file():
 @home.route("/lista_uploads")
 @login_required()
 def lista_uploads():
-	arquivos = Arquivo.query.filter(Arquivo.usuario_id==current_user._id)
+	if current_user.role == UsuarioRole.professor:
+		arquivos = Arquivo.query.filter(Arquivo.usuario_id==current_user._id)
+	elif current_user.role == UsuarioRole.aluno:
+		arquivos = Arquivo.query.filter()
 	return render_template("home/lista_uploads.html", arquivos=arquivos)
+
+@home.route("/lista_recebidos")
+@login_required()
+def lista_recebidos():
+	arquivos = db.session.query(Arquivo) \
+			.join((UsuarioDisciplina, UsuarioDisciplina.usuario_id==current_user._id)) \
+			.filter(UsuarioDisciplina.usuario_id==current_user._id)
+	return render_template("home/lista_recebidos.html", arquivos=arquivos)
 
 @home.route("/apaga_upload/<int:id>")
 @login_required()

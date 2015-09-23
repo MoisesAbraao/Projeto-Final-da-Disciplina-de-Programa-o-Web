@@ -44,4 +44,15 @@ class UsuarioRegistroDisciplinaForm(Form):
 	usuario = SelectField('Usuário', validators=[Required('Selecione um Usuário!')])
 	disciplina = SelectField('Disciplina', validators=[Required('Selecione uma Disciplina!')])
 
+class EditaUsuarioForm(Form):
+	usuario = Label('usuario', '')
+	matricula = Label('matricula', '')
+	email = Label('email', '')
+
+	def init_from_Usuario(self, usuario):
+		self.usuario = usuario.usuario
+		self.matricula = usuario.matricula
+		self.email = usuario.email
+
+
 
