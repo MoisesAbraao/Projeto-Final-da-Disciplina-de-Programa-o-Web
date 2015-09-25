@@ -223,12 +223,15 @@ def lista_uploads():
 		arquivos = Arquivo.query.filter()
 	return render_template("home/lista_uploads.html", arquivos=arquivos)
 
-@home.route("/lista_recebidos")
+@home.route("/lista_recebidos/<int:id>")
 @login_required()
-def lista_recebidos():
-	arquivos = db.session.query(Arquivo) \
-			.join((UsuarioDisciplina, UsuarioDisciplina.usuario_id==current_user._id)) \
-			.filter(UsuarioDisciplina.usuario_id==current_user._id)
+def lista_recebidos(id):
+	disciplina = Disciplina.query.filter_by(_id=id).first()
+	if disciplina:
+		arquivos = Arquivo.query.join(Disciplina, Disciplina._id==Arquivo.disciplina_id) \
+		.filter(Disciplina._id==id)
+		
+
 	return render_template("home/lista_recebidos.html", arquivos=arquivos)
 
 @home.route("/apaga_upload/<int:id>")
